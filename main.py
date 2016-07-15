@@ -9,9 +9,63 @@ short_break = 0.05
 long_break = 0.2
 unit_size = 4
 
+
+class PomodoroTimer:
+
+    def __init__(self, work_time, short_break, long_break, unit_size):
+        self.unit_size = unit_size
+        self.step = 'start'
+        self.units_counter = 0
+        self.timers = {'work' : Timer(work_time * 60, program_control, args=['work']),
+                       'short_break' : Timer(short_break * 60, program_control, args=['short_break']),
+                       'long_break' : Timer(long_break * 60, program_control, args=['long_break'])}
+    def start(self):
+        pass
+
+    def reset_counter(self):
+        self.units_counter = 0
+
+    def print_counter(self):
+        return str(self.units_counter)
+
+    def set_step(self, step):
+        self.step = step
+
+    def check_timer(self):
+        return self.units_counter < self.unit_size
+
+    def control_function(self):
+        if self.step == 'start':
+            self.reset_counter()
+            self.set_step('work')
+            logging.debug("Starting sequence. Step = " + self.step + ", units = " + self.print_counter())
+            self.timers['work'].start()
+        elif self.step == 'work' and self.check_timer():
+            winsound.Beep(300, 1200)
+            self.units_counter += 1
+            self.set_step('short_break')
+            logging.debug("Small unit finished. Step = " + self.step + ", units = " + self.print_counter())
+            self.timers['short_break'].start()
+        elif self.step == 'short_break' and not self.check_timer():
+            winsound.Beep(300, 1200)
+            self.set_step('long_break')
+            logging.debug("Big unit finished. Step = " + self.step + ", units = " + self.print_counter())
+            self.timers['long_break'].start()
+        elif self.step == 'short_break' and self.check_timer():
+            winsound.Beep(300, 1200)
+            self.unit
+            logging.debug("Short break finished. Step = " + self.step + ", units = " + self.print_counter())
+            run_timer('work')
+        elif self.step == 'long_break':
+            winsound.Beep(300, 1200)
+            logging.info("Pomodoro big unit finished!")
+            user_interface()
+        else:
+            raise ValueError("Undefined step value!")
+
 def run_timer(length_type):
     if length_type == 'work':
-        elapsed_time = Timer(work_time * 60, program_control, args=['work'])
+        elapsed_time = Timer(work_time * 60, program_control, args=['work']).
     elif length_type == 'short_break':
         elapsed_time = Timer(short_break * 60, program_control, args=['short_break'])
     elif length_type == 'long_break':
