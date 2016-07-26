@@ -1,4 +1,3 @@
-#!usr/bin/python
 from threading import Timer
 import winsound
 import logging
@@ -38,6 +37,16 @@ class PomodoroTimer:
     def check_timer(self):
         return self.units_counter < self.unit_size
 
+    def take_user_input(self):
+        logging.info(self.step + " phase finished. 1 - Continue, 2 - Stop")
+        decision = str(raw_input())
+        if decision == "1":
+            return 1
+        elif decision == "2":
+            return 2
+        else:
+            raise ValueError("Wrong input! Undefined action")
+
     def control_function(self):
         if self.step == 'start':
             self.reset_counter()
@@ -46,17 +55,29 @@ class PomodoroTimer:
             self.timers['work'].run()
         elif self.step == 'work' and self.check_timer():
             self.units_counter += 1
-            self.set_step('short_break')
+
             logging.debug("Small unit finished. Step = " + self.step + ", units = " + self.print_counter())
-            self.timers['short_break'].run()
+            if self.take_user_input() == 1:
+                self.set_step('short_break')
+                self.timers['short_break'].run()
+            else:
+                return
         elif self.step == 'work' and not self.check_timer():
-            self.set_step('long_break')
+
             logging.debug("Big unit finished. Step = " + self.step + ", units = " + self.print_counter())
-            self.timers['long_break'].run()
+            if self.take_user_input() == 1:
+                self.set_step('long_break')
+                self.timers['long_break'].run()
+            else:
+                return
         elif self.step == 'short_break':
-            self.set_step('work')
+
             logging.debug("Short break finished. Step = " + self.step + ", units = " + self.print_counter())
-            self.timers['work'].run()
+            if self.take_user_input() == 1:
+                self.set_step('work')
+                self.timers['work'].run()
+            else:
+                return
         elif self.step == 'long_break':
             logging.info("Pomodoro big unit finished!")
         else:
