@@ -1,5 +1,7 @@
 #!usr/bin/python
 import pomodoro
+import gui
+from Tkinter import *
 
 def user_interface():
     timer = pomodoro.PomodoroTimer(0.2, 0.05, 0.3, 4)
@@ -21,7 +23,11 @@ def user_interface():
         print("Goodbye")
 
 def main():
-    user_interface()
+    #user_interface()
+    root = Tk()
+    graphical_interface = gui.UserInterface(root)
+    root.mainloop()
+    root.destroy()
 
 if __name__ == '__main__':
     main()
