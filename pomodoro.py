@@ -21,6 +21,12 @@ class PomodoroTimer:
     def start(self):
         self.control_function()
 
+    def stop(self):
+        self.cancel_timers()
+        self.step = 'start'
+        self.units_counter = 0
+        logging.debug("Timers killed, members reset to initial state")
+
     def timer_callback(self):
         winsound.Beep(300, 1200)
         self.control_function()
@@ -39,13 +45,11 @@ class PomodoroTimer:
 
     def take_user_input(self):
         logging.info(self.step + " phase finished. 1 - Continue, 2 - Stop")
-        decision = str(raw_input())
-        if decision == "1":
-            return 1
-        elif decision == "2":
-            return 2
-        else:
-            raise ValueError("Wrong input! Undefined action")
+        return 1
+
+    def cancel_timers(self):
+        for key in self.timers.keys():
+            self.timers[key].cancel()
 
     def control_function(self):
         if self.step == 'start':
@@ -57,6 +61,7 @@ class PomodoroTimer:
             self.units_counter += 1
 
             logging.debug("Small unit finished. Step = " + self.step + ", units = " + self.print_counter())
+
             if self.take_user_input() == 1:
                 self.set_step('short_break')
                 self.timers['short_break'].run()
