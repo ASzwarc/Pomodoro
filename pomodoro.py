@@ -4,6 +4,7 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 
+
 class PomodoroTimer:
 
     def __init__(self, work_time, short_break, long_break, unit_size):
