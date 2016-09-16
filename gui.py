@@ -1,11 +1,12 @@
 from Tkinter import *
 import threading
+import logging
 
+logging.basicConfig(level=logging.DEBUG, format='[%(levelname)s] (%(threadName)-10s) %(message)s')
 
 class UserInterface(Frame):
 
     def __init__(self, master):
-        #self.timer_application = timer_application
         self.application_thread = threading.Thread(target=self.start_application)
         self.initialize_master(master)
         Frame.__init__(self, master)
@@ -24,10 +25,8 @@ class UserInterface(Frame):
         self.quit_button.grid()
 
     def start_application(self):
-        #self.timer_application.start()
         pass
 
     def stop_application(self):
-        #self.timer_application.stop()
         self.application_thread.join()
         self.quit()
