@@ -1,13 +1,14 @@
 #!usr/bin/python
 
-import gui
-from Tkinter import *
-
+import controller
+import sys
+from PyQt5.QtWidgets import QApplication
 
 def main():
-    root = Tk()
-    graphical_interface = gui.UserInterface(root)
-    root.destroy()
+    app = QApplication(sys.argv)
+    gui_controller = controller.Controller()
+    gui_controller.show()
+    sys.exit(app.exec_())
 
 if __name__ == '__main__':
     main()
