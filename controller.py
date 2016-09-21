@@ -15,7 +15,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.startButton.clicked.connect(self.handle_start_button)
         self.stopButton.clicked.connect(self.handle_stop_button)
         self.resetButton.clicked.connect(self.handle_reset_button)
-        self.elapsedTimeLabel.setText("0:00:00")
+        self.elapsedTimeLabel.setText("00:00")
 
     def handle_start_button(self):
         self.start_time = time.time()
@@ -26,9 +26,9 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
     
     def handle_reset_button(self):
         self.timer.stop()
-        self.elapsedTimeLabel.setText("0:00:00")
+        self.elapsedTimeLabel.setText("00:00")
 
     def handle_timeout(self):
-        elapsed_time = str(time.time() - self.start_time)
+        elapsed_time = time.strftime("%M:%S", time.gmtime(time.time() - self.start_time))
         self.elapsedTimeLabel.setText(elapsed_time)
         self.timer.start()
