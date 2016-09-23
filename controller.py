@@ -18,13 +18,20 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def initialize_ui(self):
         self.setupUi(self)
         self.dialogWindow = dialog.Dialog()
-        self.stepFinishedDialog = stepfinished_dialog.StepFinishedDialog()
+        self.stepFinishedDialog = stepfinished_dialog.StepFinishedDialog(
+            self.dialog_window_ok_callback, self.dialog_window_cancel_callback)
         self.startButton.clicked.connect(self.handle_start_button)
         self.stopButton.clicked.connect(self.handle_stop_button)
         self.resetButton.clicked.connect(self.handle_reset_button)
         self.settingsButton.clicked.connect(lambda: self.handle_default("Settings"))
         self.statisticsButton.clicked.connect(lambda: self.handle_default("Statistic"))
         self.elapsedTimeLabel.setText("00:00")
+
+    def dialog_window_ok_callback(self):
+        print("OK clicked - continue")
+
+    def dialog_window_cancel_callback(self):
+        print("Cancle clicked - stop")
 
     def handle_default(self, button_name):
         self.dialogWindow.set_information(button_name)
