@@ -2,6 +2,7 @@ from PyQt5 import QtWidgets, QtCore
 import design
 import time
 import dialog
+import stepfinished_dialog
 
 class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
@@ -10,10 +11,14 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.handle_timeout)
         self.start_time = time.time()
+        self.work_time = 5
+        self.short_break_time = 10
+        self.long_break_time = 20
     
     def initialize_ui(self):
         self.setupUi(self)
         self.dialogWindow = dialog.Dialog()
+        self.stepFinishedDialog = stepfinished_dialog.StepFinishedDialog()
         self.startButton.clicked.connect(self.handle_start_button)
         self.stopButton.clicked.connect(self.handle_stop_button)
         self.resetButton.clicked.connect(self.handle_reset_button)
@@ -23,7 +28,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
 
     def handle_default(self, button_name):
         self.dialogWindow.set_information(button_name)
-        self.dialogWindow.exec_()
+        self.dialogWindow.show()
 
     def handle_start_button(self):
         self.start_time = time.time()
@@ -37,6 +42,12 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.elapsedTimeLabel.setText("00:00")
 
     def handle_timeout(self):
+        elapsed_time_float = time.time() - self.start_time
         elapsed_time = time.strftime("%M:%S", time.gmtime(time.time() - self.start_time))
         self.elapsedTimeLabel.setText(elapsed_time)
-        self.timer.start()
+        if elapsed_time_float >= self.work_time:
+            self.timer.stop()
+            self.stepFinishedDialog.set_information("Work has been finished")
+            self.stepFinishedDialog.show()
+        else:
+            self.timer.start()
