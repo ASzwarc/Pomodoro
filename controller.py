@@ -34,7 +34,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.settingsButton.clicked.connect(lambda: self.handle_default("Settings"))
         self.statisticsButton.clicked.connect(lambda: self.handle_default("Statistic"))
         self.elapsedTimeLabel.setText("00:00")
-        self.update_phase_label()
+        self.update_status_labels()
 
     def dialog_window_ok_callback(self):
         if self.step == PomodoroSteps.Work:
@@ -51,7 +51,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.step_time = self.work_time
         else:
             pass
-        self.update_phase_label()
+        self.update_status_labels()
         self.start_time = time.time()
         self.timer.start(1000)
 
@@ -67,7 +67,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.step_time = self.work_time
             self.wasStarted = True
             self.step = PomodoroSteps.Work
-            self.update_phase_label()
+            self.update_status_labels()
             self.start_time = time.time()
             self.timer.start(1000)
         else:
@@ -82,7 +82,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.step = PomodoroSteps.Idle
         self.wasStarted = False
         self.units_counter = 0
-        self.update_phase_label()
+        self.update_status_labels()
 
     def handle_timeout(self):
         elapsed_time_float = time.time() - self.start_time
@@ -111,7 +111,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.stepFinishedDialog.set_information(text_to_display)
         self.stepFinishedDialog.show()
     
-    def update_phase_label(self):
+    def update_status_labels(self):
         phase_name = ""
         if self.step == PomodoroSteps.Work:
             phase_name = "Work"
@@ -122,3 +122,4 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         elif self.step == PomodoroSteps.Idle:
             phase_name = "Idle"
         self.phaseLabel.setText(phase_name)
+        self.unitNoLabel.setText(str(self.units_counter))
