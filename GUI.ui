@@ -18,9 +18,9 @@
     <property name="geometry">
      <rect>
       <x>30</x>
-      <y>70</y>
+      <y>110</y>
       <width>531</width>
-      <height>141</height>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -110,6 +110,45 @@
       <widget class="QPushButton" name="statisticsButton">
        <property name="text">
         <string>Statitstics</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>29</x>
+      <y>60</y>
+      <width>531</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QLabel" name="phaseLabel">
+       <property name="font">
+        <font>
+         <pointsize>15</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="unitNoLabel">
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
