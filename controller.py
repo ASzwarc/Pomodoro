@@ -10,7 +10,6 @@ class PomodoroSteps:
 class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def __init__(self):
         super(self.__class__, self).__init__()
-        self.initialize_ui()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.handle_timeout)
         self.start_time = time.time()
@@ -22,6 +21,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.wasStarted = False
         self.step_time = 0
         self.units_counter = 0
+        self.initialize_ui()
     
     def initialize_ui(self):
         self.setupUi(self)
@@ -34,6 +34,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.settingsButton.clicked.connect(lambda: self.handle_default("Settings"))
         self.statisticsButton.clicked.connect(lambda: self.handle_default("Statistic"))
         self.elapsedTimeLabel.setText("00:00")
+        self.update_phase_label()
 
     def dialog_window_ok_callback(self):
         if self.step == PomodoroSteps.Work:
@@ -50,8 +51,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.step_time = self.work_time
         else:
             pass
-
-        print("OK clicked - continue")
+        self.update_phase_label()
         self.start_time = time.time()
         self.timer.start(1000)
 
@@ -67,6 +67,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
             self.step_time = self.work_time
             self.wasStarted = True
             self.step = PomodoroSteps.Work
+            self.update_phase_label()
             self.start_time = time.time()
             self.timer.start(1000)
         else:
@@ -81,6 +82,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.step = PomodoroSteps.Idle
         self.wasStarted = False
         self.units_counter = 0
+        self.update_phase_label()
 
     def handle_timeout(self):
         elapsed_time_float = time.time() - self.start_time
@@ -108,3 +110,15 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         text_to_display += "has been finished"
         self.stepFinishedDialog.set_information(text_to_display)
         self.stepFinishedDialog.show()
+    
+    def update_phase_label(self):
+        phase_name = ""
+        if self.step == PomodoroSteps.Work:
+            phase_name = "Work"
+        elif self.step == PomodoroSteps.ShortBreak:
+            phase_name = "Short break"
+        elif self.step == PomodoroSteps.LongBreak:
+            phase_name = "Long break"
+        elif self.step == PomodoroSteps.Idle:
+            phase_name = "Idle"
+        self.phaseLabel.setText(phase_name)
