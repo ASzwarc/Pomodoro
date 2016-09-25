@@ -7,7 +7,6 @@ from PyQt5.QtWidgets import QApplication
 def main():
     app = QApplication(sys.argv)
     gui_controller = controller.Controller()
-    gui_controller.show()
     sys.exit(app.exec_())
 
 if __name__ == '__main__':

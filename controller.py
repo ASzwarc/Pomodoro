@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
-import design
+import main_window
 import time
 import dialog
 import stepfinished_dialog
@@ -7,11 +7,8 @@ import stepfinished_dialog
 class PomodoroSteps:
     Idle, Work, ShortBreak, LongBreak = range(0, 4)
 
-class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
+class Controller():
     def __init__(self):
-        super(self.__class__, self).__init__()
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self.handle_timeout)
         self.start_time = time.time()
         self.work_time = 5
         self.short_break_time = 10
@@ -22,19 +19,18 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.step_time = 0
         self.units_counter = 0
         self.initialize_ui()
+        self.timer = QtCore.QTimer(self.mainWindow)
+        self.timer.timeout.connect(self.handle_timeout)
     
     def initialize_ui(self):
-        self.setupUi(self)
+        self.mainWindow = main_window.MainWindow(self.handle_start_button, 
+            self.handle_stop_button, self.handle_reset_button, 
+            lambda: self.handle_default("Settings"), lambda: self.handle_default("Statistics"))     
         self.dialogWindow = dialog.Dialog()
         self.stepFinishedDialog = stepfinished_dialog.StepFinishedDialog(
             self.dialog_window_ok_callback, self.dialog_window_cancel_callback)
-        self.startButton.clicked.connect(self.handle_start_button)
-        self.stopButton.clicked.connect(self.handle_stop_button)
-        self.resetButton.clicked.connect(self.handle_reset_button)
-        self.settingsButton.clicked.connect(lambda: self.handle_default("Settings"))
-        self.statisticsButton.clicked.connect(lambda: self.handle_default("Statistic"))
-        self.elapsedTimeLabel.setText("00:00")
         self.update_status_labels()
+        self.mainWindow.show()
 
     def dialog_window_ok_callback(self):
         if self.step == PomodoroSteps.Work:
@@ -78,7 +74,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
     
     def handle_reset_button(self):
         self.timer.stop()
-        self.elapsedTimeLabel.setText("00:00")
+        self.mainWindow.update_elapsed_time_label("00:00")
         self.step = PomodoroSteps.Idle
         self.wasStarted = False
         self.units_counter = 0
@@ -87,7 +83,7 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def handle_timeout(self):
         elapsed_time_float = time.time() - self.start_time
         elapsed_time = time.strftime("%M:%S", time.gmtime(elapsed_time_float))
-        self.elapsedTimeLabel.setText(elapsed_time)
+        self.mainWindow.update_elapsed_time_label(elapsed_time)
         if elapsed_time_float >= self.step_time:
             self.timer.stop()
             if self.step == PomodoroSteps.Work:
@@ -121,5 +117,5 @@ class Controller(QtWidgets.QMainWindow, design.Ui_MainWindow):
             phase_name = "Long break"
         elif self.step == PomodoroSteps.Idle:
             phase_name = "Idle"
-        self.phaseLabel.setText(phase_name)
-        self.unitNoLabel.setText(str(self.units_counter))
+        self.mainWindow.update_phase_label(phase_name)
+        self.mainWindow.update_unit_no_label(str(self.units_counter))
