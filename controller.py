@@ -3,6 +3,7 @@ import main_window
 import time
 import dialog
 import stepfinished_dialog
+import settings_dialog
 
 class PomodoroSteps:
     Idle, Work, ShortBreak, LongBreak = range(0, 4)
@@ -24,13 +25,21 @@ class Controller():
     
     def initialize_ui(self):
         self.mainWindow = main_window.MainWindow(self.handle_start_button, 
-            self.handle_stop_button, self.handle_reset_button, 
-            lambda: self.handle_default("Settings"), lambda: self.handle_default("Statistics"))     
+            self.handle_stop_button, self.handle_reset_button, self.handle_settings_button, 
+            lambda: self.handle_default("Statistics"))     
         self.dialogWindow = dialog.Dialog()
         self.stepFinishedDialog = stepfinished_dialog.StepFinishedDialog(
             self.dialog_window_ok_callback, self.dialog_window_cancel_callback)
+        self.settingsWindow = settings_dialog.SettingsDialog(self.settings_window_ok_callback, 
+            self.settings_window_cancel_callback)
         self.update_status_labels()
         self.mainWindow.show()
+
+    def settings_window_ok_callback(self):
+        pass
+
+    def settings_window_cancel_callback(self):
+        pass
 
     def dialog_window_ok_callback(self):
         self.set_next_step()
@@ -40,6 +49,9 @@ class Controller():
 
     def dialog_window_cancel_callback(self):
         print("Cancel clicked - stop")
+
+    def handle_settings_button(self):
+        self.settingsWindow.show()
 
     def handle_default(self, button_name):
         self.dialogWindow.set_information(button_name)

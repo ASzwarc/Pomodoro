@@ -1,7 +1,7 @@
 from PyQt5 import QtWidgets
-from design.stepfinished_dialog_design import Ui_StepFinishedDialog
+from design.settings_dialog_design import Ui_SettingsWindow
 
-class StepFinishedDialog(QtWidgets.QDialog, Ui_StepFinishedDialog):
+class SettingsDialog(QtWidgets.QDialog, Ui_SettingsWindow):
     def __init__(self, accept_callback, reject_callback):
         super(self.__class__, self).__init__()
         self.setupUi(self)
@@ -15,6 +15,3 @@ class StepFinishedDialog(QtWidgets.QDialog, Ui_StepFinishedDialog):
     def handle_reject(self, reject_callback):
         reject_callback()
         self.reject
-
-    def set_information(self, text_to_display):
-        self.notificationLabel.setText(text_to_display)
