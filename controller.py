@@ -33,20 +33,7 @@ class Controller():
         self.mainWindow.show()
 
     def dialog_window_ok_callback(self):
-        if self.step == PomodoroSteps.Work:
-            self.step = PomodoroSteps.ShortBreak
-            self.step_time = self.short_break_time
-        elif (self.step == PomodoroSteps.ShortBreak) and (self.units_counter < self.unit_size):
-            self.step = PomodoroSteps.Work
-            self.step_time = self.work_time
-        elif (self.step == PomodoroSteps.ShortBreak) and (self.units_counter >= self.unit_size):
-            self.step = PomodoroSteps.LongBreak
-            self.step_time = self.long_break_time
-        elif self.step == PomodoroSteps.LongBreak:
-            self.step = PomodoroSteps.Work
-            self.step_time = self.work_time
-        else:
-            pass
+        self.set_next_step()
         self.update_status_labels()
         self.start_time = time.time()
         self.timer.start(1000)
@@ -60,9 +47,8 @@ class Controller():
 
     def handle_start_button(self):
         if self.wasStarted == False:
-            self.step_time = self.work_time
             self.wasStarted = True
-            self.step = PomodoroSteps.Work
+            self.set_next_step()
             self.update_status_labels()
             self.start_time = time.time()
             self.timer.start(1000)
@@ -119,3 +105,20 @@ class Controller():
             phase_name = "Idle"
         self.mainWindow.update_phase_label(phase_name)
         self.mainWindow.update_unit_no_label(str(self.units_counter))
+
+    def set_next_step(self):
+        if self.step == PomodoroSteps.Work:
+            self.step = PomodoroSteps.ShortBreak
+            self.step_time = self.short_break_time
+        elif (self.step == PomodoroSteps.ShortBreak) and (self.units_counter < self.unit_size):
+            self.step = PomodoroSteps.Work
+            self.step_time = self.work_time
+        elif (self.step == PomodoroSteps.ShortBreak) and (self.units_counter >= self.unit_size):
+            self.step = PomodoroSteps.LongBreak
+            self.step_time = self.long_break_time
+        elif self.step == PomodoroSteps.LongBreak:
+            self.step = PomodoroSteps.Work
+            self.step_time = self.work_time
+        elif self.setp == PomodoroSteps.Idle:
+            self.step = PomodoroSteps.Work
+            self.step_time = self.work_time
