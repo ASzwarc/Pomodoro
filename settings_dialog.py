@@ -15,3 +15,9 @@ class SettingsDialog(QtWidgets.QDialog, Ui_SettingsWindow):
     def handle_reject(self, reject_callback):
         reject_callback()
         self.reject
+
+    def set_current_values(self, work_time, short_break_time, long_break_time, no_of_units):
+        self.shortBreakTimeEdit.setText(short_break_time)
+        self.longBreakTimeEdit.setText(long_break_time)
+        self.workTimeEdit.setText(work_time)
+        self.noOfUnitsEdit.setText(no_of_units)

@@ -5,15 +5,37 @@ import dialog
 import stepfinished_dialog
 import settings_dialog
 
+def time_to_str(no_of_unit):
+    ret_val = ""
+    if (no_of_unit == 0):
+        ret_val = "00"
+    else:
+        ret_val = str(no_of_unit)
+        if (len(ret_val) == 1):
+            ret_val = "0" + ret_val
+    return ret_val
+
+def translate_time(time):
+    seconds, minutes, hours = 3*[""]
+    no_of_hours = int(time / 3600)
+    hours = time_to_str(no_of_hours)
+    time -= (no_of_hours * 3600)
+    no_of_minutes = int(time / 60)
+    minutes = time_to_str(no_of_minutes)
+    time -= (no_of_minutes * 60)
+    no_of_seconds = int(time)
+    seconds = time_to_str(no_of_seconds)
+    return hours + ":" + minutes + ":" + seconds
+
 class PomodoroSteps:
     Idle, Work, ShortBreak, LongBreak = range(0, 4)
 
 class Controller():
     def __init__(self):
         self.start_time = time.time()
-        self.work_time = 5
-        self.short_break_time = 10
-        self.long_break_time = 20
+        self.work_time = 1800
+        self.short_break_time = 300
+        self.long_break_time = 1200
         self.unit_size = 4
         self.step = PomodoroSteps.Idle
         self.wasStarted = False
@@ -51,6 +73,9 @@ class Controller():
         print("Cancel clicked - stop")
 
     def handle_settings_button(self):
+        self.settingsWindow.set_current_values(translate_time(self.work_time), 
+            translate_time(self.short_break_time), translate_time(self.long_break_time),
+            str(self.unit_size))
         self.settingsWindow.show()
 
     def handle_default(self, button_name):
@@ -131,6 +156,6 @@ class Controller():
         elif self.step == PomodoroSteps.LongBreak:
             self.step = PomodoroSteps.Work
             self.step_time = self.work_time
-        elif self.setp == PomodoroSteps.Idle:
+        elif self.step == PomodoroSteps.Idle:
             self.step = PomodoroSteps.Work
             self.step_time = self.work_time
