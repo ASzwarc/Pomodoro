@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets, QtCore
+from datetime import datetime
 import main_window
 import time
 import dialog
@@ -15,7 +16,7 @@ def time_to_str(no_of_unit):
             ret_val = "0" + ret_val
     return ret_val
 
-def translate_time(time):
+def translate_to_time(time):
     seconds, minutes, hours = 3*[""]
     no_of_hours = int(time / 3600)
     hours = time_to_str(no_of_hours)
@@ -26,6 +27,10 @@ def translate_time(time):
     no_of_seconds = int(time)
     seconds = time_to_str(no_of_seconds)
     return hours + ":" + minutes + ":" + seconds
+
+def translate_from_time(time_in_str):
+    datetime_obj = datetime.strptime(time_in_str, '%H:%M:%S')
+    return datetime_obj.second + 60 * datetime_obj.minute + 3600 * datetime_obj.hour
 
 class PomodoroSteps:
     Idle, Work, ShortBreak, LongBreak = range(0, 4)
@@ -58,7 +63,10 @@ class Controller():
         self.mainWindow.show()
 
     def settings_window_ok_callback(self):
-        pass
+        self.work_time = translate_from_time(self.settingsWindow.get_work_time())
+        self.short_break_time = translate_from_time(self.settingsWindow.get_short_break_time())
+        self.long_break_time = translate_from_time(self.settingsWindow.get_long_break_time())
+        self.unit_size = int(self.settingsWindow.get_no_of_units())
 
     def settings_window_cancel_callback(self):
         pass
@@ -73,8 +81,8 @@ class Controller():
         print("Cancel clicked - stop")
 
     def handle_settings_button(self):
-        self.settingsWindow.set_current_values(translate_time(self.work_time), 
-            translate_time(self.short_break_time), translate_time(self.long_break_time),
+        self.settingsWindow.set_current_values(translate_to_time(self.work_time), 
+            translate_to_time(self.short_break_time), translate_to_time(self.long_break_time),
             str(self.unit_size))
         self.settingsWindow.show()
 

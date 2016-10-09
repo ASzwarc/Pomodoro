@@ -21,3 +21,15 @@ class SettingsDialog(QtWidgets.QDialog, Ui_SettingsWindow):
         self.longBreakTimeEdit.setText(long_break_time)
         self.workTimeEdit.setText(work_time)
         self.noOfUnitsEdit.setText(no_of_units)
+
+    def get_work_time(self):
+        return self.workTimeEdit.text()
+
+    def get_short_break_time(self):
+        return self.shortBreakTimeEdit.text()
+
+    def get_long_break_time(self):
+        return self.longBreakTimeEdit.text()
+
+    def get_no_of_units(self):
+        return self.noOfUnitsEdit.text()
