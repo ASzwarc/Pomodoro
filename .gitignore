@@ -3,4 +3,4 @@
 #ignore python byte code files
 *.pyc
 #ignore pytest output folder
-.cached/
+.cache/
