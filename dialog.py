@@ -1,6 +1,7 @@
 from PyQt5 import QtWidgets
 import dialog_design
 
+
 class Dialog(QtWidgets.QDialog, dialog_design.Ui_dialogWindow):
     def __init__(self):
         super(self.__class__, self).__init__()

@@ -1,10 +1,11 @@
 from PyQt5 import QtWidgets, QtCore
 from design.main_window_design import Ui_MainWindow
 
+
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self, action_on_start_button, action_on_stop_button, 
-        action_on_reset_button, action_on_settings_button, 
-        action_on_statistics_button):
+    def __init__(self, action_on_start_button, action_on_stop_button,
+                 action_on_reset_button, action_on_settings_button,
+                 action_on_statistics_button):
         super(self.__class__, self).__init__()
         self.setupUi(self)
         self.startButton.clicked.connect(action_on_start_button)
