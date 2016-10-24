@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtCore
 from datetime import datetime
+import json
 import main_window
 import time
 import dialog
@@ -45,14 +46,15 @@ class PomodoroSteps:
 class Controller():
     def __init__(self):
         self.start_time = time.time()
-        self.work_time = 1500
-        self.short_break_time = 300
-        self.long_break_time = 1200
-        self.unit_size = 4
+        self.work_time = 0
+        self.short_break_time = 0
+        self.long_break_time = 0
+        self.unit_size = 0
         self.step = PomodoroSteps.Idle
         self.wasStarted = False
         self.step_time = 0
         self.units_counter = 0
+        self.load_configuration()
         self.initialize_ui()
         self.timer = QtCore.QTimer(self.mainWindow)
         self.timer.timeout.connect(self.handle_timeout)
@@ -77,7 +79,13 @@ class Controller():
         self.mainWindow.show()
 
     def load_configuration(self):
-        pass
+        with open('config/conf.json') as config_file:
+            configuration = json.load(config_file)
+            self.work_time = int(configuration['work_time'])
+            self.short_break_time = int(configuration['short_break_time'])
+            self.long_break_time = int(configuration['long_break_time'])
+            self.unit_size = int(configuration['unit_size'])
+        print("Configuration loaded")
 
     def settings_window_ok_callback(self):
         self.work_time = translate_from_time(
