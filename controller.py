@@ -87,6 +87,17 @@ class Controller():
             self.unit_size = int(configuration['unit_size'])
         print("Configuration loaded")
 
+    def save_configuration(self):
+        with open('config/conf.json', 'w') as config_file:
+            new_config = {
+            'work_time': self.work_time,
+            'short_break_time': self.short_break_time,
+            'long_break_time': self.long_break_time,
+            'unit_size': self.unit_size,
+            }
+            config_file.write(json.dumps(new_config))
+        print("Configuration saved")
+
     def settings_window_ok_callback(self):
         self.work_time = translate_from_time(
             self.settingsWindow.get_work_time())
@@ -95,9 +106,10 @@ class Controller():
         self.long_break_time = translate_from_time(
             self.settingsWindow.get_long_break_time())
         self.unit_size = int(self.settingsWindow.get_no_of_units())
+        self.save_configuration()
 
     def settings_window_cancel_callback(self):
-        pass
+        print("Cancelled - changes will be discarded")
 
     def dialog_window_ok_callback(self):
         self.set_next_step()
