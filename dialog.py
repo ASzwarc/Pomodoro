@@ -1,5 +1,5 @@
 from PyQt5 import QtWidgets
-import dialog_design
+from design import dialog_design
 
 
 class Dialog(QtWidgets.QDialog, dialog_design.Ui_dialogWindow):
